@@ -6,8 +6,8 @@ import "hardhat/console.sol";
 contract Token {
     string public name = "my token";
     string public symbol = "MYT";
-    uint256 public decimal = 10**18;
-    uint256 public totalSupply = 1000000 * decimal;
+    uint256 public decimals = 6;
+    uint256 public totalSupply = 1000000 * (10**decimals);
     mapping(address => uint256) balances;
 
     constructor() {

@@ -6,8 +6,8 @@ import Greeter from "./artifacts/contracts/Greeter.sol/Greeter.json";
 import Token from "./artifacts/contracts/Token.sol/Token.json";
 
 // Update with the contract address logged out to the CLI when it was deployed
-const greeterAddress = "0xdF5E9f0b981bFC3cb8c9E7F5e0Cb4b869178aB3d";
-const tokenAddress = "0x4F57b1BC778945831AAF671B6657c6A143594F15";
+const greeterAddress = "0x7974D496e85783183eF0f32AB7a2D7d7789d11c4";
+const tokenAddress = "0xEB0c326efB4AC8028eED696d27cfBe6B56dCFC34";
 
 function App() {
   // store greeting in local state
