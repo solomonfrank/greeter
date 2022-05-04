@@ -17,6 +17,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  * @type import('hardhat/config').HardhatUserConfig
  */
 const privateKey = "";
+
 module.exports = {
   defaultNetwork: "hardhat",
   solidity: "0.8.4",
@@ -29,7 +30,7 @@ module.exports = {
     },
     ropsten: {
       url: "",
-      accounts: [`0x${privateKey}`],
+      accounts: [`${privateKey}`],
     },
   },
 };

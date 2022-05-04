@@ -3,13 +3,17 @@ import "./App.css";
 import { useState } from "react";
 import { ethers } from "ethers";
 import Greeter from "./artifacts/contracts/Greeter.sol/Greeter.json";
+import Token from "./artifacts/contracts/Token.sol/Token.json";
 
 // Update with the contract address logged out to the CLI when it was deployed
-const greeterAddress = "0x360f3b8eb7a46DF8e63FCF96b985eF586eDc529c";
+const greeterAddress = "0xdF5E9f0b981bFC3cb8c9E7F5e0Cb4b869178aB3d";
+const tokenAddress = "0x4F57b1BC778945831AAF671B6657c6A143594F15";
 
 function App() {
   // store greeting in local state
   const [greeting, setGreetingValue] = useState();
+  const [amount, setAmount] = useState();
+  const [userAccount, setUserAccount] = useState();
 
   // request access to the user's MetaMask account
   async function requestAccount() {
@@ -33,6 +37,47 @@ function App() {
       }
     }
   }
+
+  const getBalance = async () => {
+    if (typeof window.ethereum != "undefined") {
+      const [account] = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log({ account });
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(tokenAddress, Token.abi, signer);
+      try {
+        const balance = await contract.balanceOf(account);
+
+        console.log({ balance: balance.toString() });
+
+        // setUserAccount(balance.toString());
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  const sendCoins = async () => {
+    if (typeof window.ethereum !== "undefined") {
+      try {
+        await requestAccount();
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(tokenAddress, Token.abi, signer);
+        console.log({ userAccount, amount: Number(amount) });
+        const transaction = await contract.transfer(
+          userAccount,
+          Number(amount)
+        );
+        await transaction.wait();
+        console.log(`${amount} Coins successfully sent to ${userAccount}`);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
 
   // call the smart contract, send an update
   async function setGreeting() {
@@ -60,6 +105,18 @@ function App() {
         <input
           onChange={(e) => setGreetingValue(e.target.value)}
           placeholder="Set greeting"
+        />
+
+        <br />
+        <button onClick={getBalance}>Get Balance</button>
+        <button onClick={sendCoins}>Send Coins</button>
+        <input
+          onChange={(e) => setUserAccount(e.target.value)}
+          placeholder="Account ID"
+        />
+        <input
+          onChange={(e) => setAmount(e.target.value)}
+          placeholder="Amount"
         />
       </header>
     </div>
